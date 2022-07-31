@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "IkariamScripts",
+  "version": "1.0",
+
+  "description": "Scripts facilitadores para o game Ikariam",
+
+  "icons": {
+    "48": "icons/ikariam.png",
+	  "96": "icons/ikariam.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.ikariam.gameforge.com/*"],
+      "css": [ "views/css.css" ],
+      "js": ["scripts/jquery.js","scripts/IkariamScripts.js"]
+    }
+  ]
+
+}
