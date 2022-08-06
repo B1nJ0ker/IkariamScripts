@@ -130,17 +130,43 @@ function decimalToTime(decimal){
 }
 function CMStats(){
 	try {
-		notifyAudio.play();
 			//let habitantes = Number(document.getElementById('js_TownHallOccupiedSpace').innerHTML.replace(",",""));
 			let maxHabitantes = Number(document.getElementById('js_TownHallMaxInhabitants').innerHTML.replace(",",""));
 			//let crescimentoPH = Number(document.getElementById('js_TownHallPopulationGrowthValue').innerHTML.replace(",",""));
 			let satisfacao = Number(document.getElementById('js_TownHallHappinessLargeValue').innerHTML.replace(",",""));
-			let bonusSatisfacao = Number(document.getElementById('js_TownHallSatisfactionOverviewBaseBoniBaseBonusValue').innerHTML.replace(",","")) +
-			Number(document.getElementById('js_TownHallSatisfactionOverviewBaseBoniCapitalBonusValue').innerHTML.replace(",","")) +
-			Number(document.getElementById('js_TownHallSatisfactionOverviewWineBoniTavernBonusValue').innerHTML.replace(",","")) +
-			Number(document.getElementById('js_TownHallSatisfactionOverviewWineBoniServeBonusValue').innerHTML.replace(",",""));
+			
+			let baseBonus = document.getElementById('js_TownHallSatisfactionOverviewBaseBoniBaseBonusValue');
+			if(!baseBonus.parentElement.classList.contains('invisible')){
+				baseBonus = Number(baseBonus.innerHTML.replace(",",""));
+			}else{
+				baseBonus = 0;
+			}
+
+			let baseBonusCapital = document.getElementById('js_TownHallSatisfactionOverviewBaseBoniCapitalBonusValue');
+			if(!baseBonusCapital.parentElement.classList.contains('invisible')){
+				baseBonusCapital = Number(baseBonusCapital.innerHTML.replace(",",""));
+			}else{
+				baseBonusCapital = 0;
+			}
+
+			let wineBonusTaverna = document.getElementById('js_TownHallSatisfactionOverviewWineBoniTavernBonusValue');
+			if(!wineBonusTaverna.parentElement.classList.contains('invisible')){
+				wineBonusTaverna = Number(wineBonusTaverna.innerHTML.replace(",",""));
+			}else{
+				wineBonusTaverna = 0;
+			}
+
+			let wineBonusServido = document.getElementById('js_TownHallSatisfactionOverviewWineBoniServeBonusValue');
+			if(!wineBonusServido.parentElement.classList.contains('invisible')){
+				wineBonusServido = Number(wineBonusServido.innerHTML.replace(",",""));
+			}else{
+				wineBonusServido = 0;
+			}
+			
+			let bonusSatisfacao = baseBonus + baseBonusCapital + wineBonusTaverna + wineBonusServido;
 			//let tempoParaLotar = (maxHabitantes - habitantes) / crescimentoPH
 			let tempoParaLotar = 50*Math.log(satisfacao/(bonusSatisfacao-maxHabitantes));
+
 			let aviso = '';
 			if(tempoParaLotar < 0 ){
 				aviso = '-E-'
@@ -343,7 +369,7 @@ function notifyExtension() {
 }
 try {
 	var notifyAudio = new Audio("https://assets.mixkit.co/sfx/download/mixkit-sci-fi-confirmation-914.wav");
-	
+	//notifyAudio.play();
 	//document.getElementById('advCities').addEventListener("click", notifyExtension);
 	var btn = document.createElement('b');
 	btn.innerHTML = ' # OK';
