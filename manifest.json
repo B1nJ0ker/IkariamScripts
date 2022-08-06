@@ -16,6 +16,12 @@
       "css": [ "views/css.css" ],
       "js": ["scripts/jquery.js","scripts/IkariamScripts.js"]
     }
-  ]
+  ],
+
+  "permissions": ["notifications"],
+  "background": {
+    "scripts": ["scripts/background.js"]
+  },
+  "web_accessible_resources": ["audios/mixkit-sci-fi-confirmation-914.wav"]
 
 }

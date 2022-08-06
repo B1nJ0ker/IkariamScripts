@@ -67,8 +67,6 @@ mainBox.appendChild(hr);
 	document.getElementById("barbarianVillage"))).ready(function(){
 		alert('o')
 	}); 
-<span class="producaoLabel">(+1000)</span>
-	
 */
 
 /* SOMA DE RECURSOS PILHAGEM DE BÁRBAROS */
@@ -131,29 +129,37 @@ function decimalToTime(decimal){
 	return {dias: dias, horas: horas, minutos: minutos};
 }
 function CMStats(){
-	//let habitantes = Number(document.getElementById('js_TownHallOccupiedSpace').innerHTML.replace(",",""));
-	let maxHabitantes = Number(document.getElementById('js_TownHallMaxInhabitants').innerHTML.replace(",",""));
-	//let crescimentoPH = Number(document.getElementById('js_TownHallPopulationGrowthValue').innerHTML.replace(",",""));
-	let satisfacao = Number(document.getElementById('js_TownHallHappinessLargeValue').innerHTML.replace(",",""));
-	let bonusSatisfacao = Number(document.getElementById('js_TownHallSatisfactionOverviewBaseBoniBaseBonusValue').innerHTML.replace(",","")) +
-	Number(document.getElementById('js_TownHallSatisfactionOverviewBaseBoniCapitalBonusValue').innerHTML.replace(",","")) +
-	Number(document.getElementById('js_TownHallSatisfactionOverviewWineBoniTavernBonusValue').innerHTML.replace(",","")) +
-	Number(document.getElementById('js_TownHallSatisfactionOverviewWineBoniServeBonusValue').innerHTML.replace(",",""));
-	//let tempoParaLotar = (maxHabitantes - habitantes) / crescimentoPH
-	let tempoParaLotar = 50*Math.log(satisfacao/(bonusSatisfacao-maxHabitantes));
-	let tempo = decimalToTime(tempoParaLotar);
+	try {
+		notifyAudio.play();
+			//let habitantes = Number(document.getElementById('js_TownHallOccupiedSpace').innerHTML.replace(",",""));
+			let maxHabitantes = Number(document.getElementById('js_TownHallMaxInhabitants').innerHTML.replace(",",""));
+			//let crescimentoPH = Number(document.getElementById('js_TownHallPopulationGrowthValue').innerHTML.replace(",",""));
+			let satisfacao = Number(document.getElementById('js_TownHallHappinessLargeValue').innerHTML.replace(",",""));
+			let bonusSatisfacao = Number(document.getElementById('js_TownHallSatisfactionOverviewBaseBoniBaseBonusValue').innerHTML.replace(",","")) +
+			Number(document.getElementById('js_TownHallSatisfactionOverviewBaseBoniCapitalBonusValue').innerHTML.replace(",","")) +
+			Number(document.getElementById('js_TownHallSatisfactionOverviewWineBoniTavernBonusValue').innerHTML.replace(",","")) +
+			Number(document.getElementById('js_TownHallSatisfactionOverviewWineBoniServeBonusValue').innerHTML.replace(",",""));
+			//let tempoParaLotar = (maxHabitantes - habitantes) / crescimentoPH
+			let tempoParaLotar = 50*Math.log(satisfacao/(bonusSatisfacao-maxHabitantes));
+			let aviso = '';
+			if(tempoParaLotar < 0 ){
+				aviso = '-E-'
+			}
+			let tempo = decimalToTime(Math.abs(tempoParaLotar));
 
-	if(document.getElementById('textResultado') != null){
-		let textResultado = document.getElementById('textResultado');
-		textResultado.innerHTML = "<br>"+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
-	}else{
-		let textResultado = document.createElement('b');
-		//textResultado.style.color = 'white';
-		textResultado.id = 'textResultado';
-		textResultado.innerHTML = "<br>"+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
-		//mainBox.appendChild(textResultado);
-		document.getElementsByClassName('space')[0].appendChild(textResultado);
+			if(document.getElementById('textResultado') != null){
+				let textResultado = document.getElementById('textResultado');
+				textResultado.innerHTML = "<br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M "+aviso+"<br>";
+			}else{
+				let textResultado = document.createElement('b');
+				textResultado.id = 'textResultado';
+				textResultado.innerHTML = "<br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M "+aviso+"<br>";
+				document.getElementsByClassName('space')[0].appendChild(textResultado);
+			}
+	} catch (error) {
+		alert((error));
 	}
+
 
 }
 function buildingTime(){
@@ -178,12 +184,12 @@ function buildingTime(){
 			
 			if(document.getElementById('buildingTimeCalcMadeira') != null){
 				let txt = document.getElementById('buildingTimeCalcMadeira');
-				txt.innerHTML = "<br>"+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				txt.innerHTML = "<br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 			}else{
 				let txt = document.createElement('b');
 				txt.id = 'buildingTimeCalcMadeira';
 				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='//gf2.geo.gfsrv.net/cdn19/c3527b2f694fb882563c04df6d8972.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				txt.innerHTML = "<img width='13px' src='//gf2.geo.gfsrv.net/cdn19/c3527b2f694fb882563c04df6d8972.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 				document.getElementById('buildingUpgrade').appendChild(txt);
 			}
 		}else
@@ -196,12 +202,12 @@ function buildingTime(){
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
 			if(document.getElementById('buildingTimeCalcMarmore') != null){
-				document.getElementById('buildingTimeCalcMarmore').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_marble.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				document.getElementById('buildingTimeCalcMarmore').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_marble.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 			}else{
 				let txt = document.createElement('b');
 				txt.id = 'buildingTimeCalcMarmore';
 				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_marble.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_marble.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 				document.getElementById('buildingUpgrade').appendChild(txt);
 			}
 		}else
@@ -214,12 +220,12 @@ function buildingTime(){
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
 			if(document.getElementById('buildingTimeCalcVinho') != null){
-				document.getElementById('buildingTimeCalcVinho').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_wine.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				document.getElementById('buildingTimeCalcVinho').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_wine.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 			}else{
 				let txt = document.createElement('b');
 				txt.id = 'buildingTimeCalcVinho';
 				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_wine.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_wine.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 				document.getElementById('buildingUpgrade').appendChild(txt);
 			}
 		}else
@@ -232,12 +238,12 @@ function buildingTime(){
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
 			if(document.getElementById('buildingTimeCalcCristal') != null){
-				document.getElementById('buildingTimeCalcCristal').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_glass.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				document.getElementById('buildingTimeCalcCristal').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_glass.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 			}else{
 				let txt = document.createElement('b');
 				txt.id = 'buildingTimeCalcCristal';
 				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_glass.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_glass.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 				document.getElementById('buildingUpgrade').appendChild(txt);
 			}
 		}else
@@ -250,12 +256,12 @@ function buildingTime(){
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
 			if(document.getElementById('buildingTimeCalcEnxofre') != null){
-				document.getElementById('buildingTimeCalcEnxofre').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_sulfur.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				document.getElementById('buildingTimeCalcEnxofre').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_sulfur.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 			}else{
 				let txt = document.createElement('b');
 				txt.id = 'buildingTimeCalcEnxofre';
 				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_sulfur.png'> "+tempo.dias+" Dias "+tempo.horas+" Horas e "+tempo.minutos+" Minutos <br>";
+				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_sulfur.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
 				document.getElementById('buildingUpgrade').appendChild(txt);
 			}
 		}
@@ -271,7 +277,6 @@ function exibirProducao(){
 	let producaoEnxofre = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",",""));
 	let producaoGold = Number(document.getElementById('js_GlobalMenu_gold_Calculation').innerHTML.replace(",",""));
 	$('.producaoLabel').remove()
-	
 	document.getElementById('js_GlobalMenu_gold').innerHTML += ' <span class="producaoLabel '+((producaoGold) > 0 ? 'positivo' : 'negativo')+'">('+producaoGold+')</span>';
 
 	let cityResources = document.getElementById('cityResources')
@@ -281,6 +286,13 @@ function exibirProducao(){
 				element.innerHTML += '<span class="producaoLabel '+((producaoMadeira) > 0 ? 'positivo' : 'negativo')+'">('+producaoMadeira+')</span>';
 			}
 			if(element.classList.contains('wine')){
+				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",",""));
+				let tempoPraZerar = '';
+				if((producaoVinho-consumoVinho) < 0 ){
+					tempoPraZerar = decimalToTime(estoque / Math.abs(producaoVinho-consumoVinho))
+					stringTempo = tempoPraZerar.dias+'D '+tempoPraZerar.horas+'H '+tempoPraZerar.minutos+'M';
+					document.getElementById('js_GlobalMenu_wine_tooltip').getElementsByTagName('tbody')[0].innerHTML += '<tr id="js_GlobalMenu_production_wine_tempoPraZerar" class="producaoLabel"><td class="smallFont" >Tempo até zerar</td><td class="rightText" id="js_GlobalMenu_production_wine_tempoPraZerar_value">'+stringTempo+'</td></tr>';
+				}
 				element.innerHTML += '<span class="producaoLabel '+((producaoVinho-consumoVinho) > 0 ? 'positivo' : 'negativo')+'">('+(producaoVinho-consumoVinho)+')</span>';
 			}
 			if(element.classList.contains('marble')){
@@ -325,6 +337,26 @@ var callback = function(mutationList, observer) {
         }
     }
 };
+function notifyExtension() {
+	browser.runtime.sendMessage({msg: 'Vai lá chehcar, bucha!!', title: 'Algo Aconteceu!'});
+	return;
+}
+try {
+	var notifyAudio = new Audio("https://assets.mixkit.co/sfx/download/mixkit-sci-fi-confirmation-914.wav");
+	
+	//document.getElementById('advCities').addEventListener("click", notifyExtension);
+	var btn = document.createElement('b');
+	btn.innerHTML = ' # OK';
+	mainBox.appendChild(btn);
+} catch (error) {
+	var btn = document.createElement('b');
+	btn.innerHTML = (error)+' # Error';
+	mainBox.appendChild(btn);
+}
+
+var notify = new MutationObserver(notifyExtension);
+notify.observe(document.getElementById('advCities'), config);
+
 var observer = new MutationObserver(callback);
 observer.observe(document, config);
 
