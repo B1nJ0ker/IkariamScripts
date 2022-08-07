@@ -1,0 +1,32 @@
+
+
+/// CALCULO VILA DE BARBAROS
+/* $(ikariam.getScreen().selectBarbarianVillage(
+	document.getElementById("barbarianVillage"))).ready(function(){
+		alert('o')
+	}); 
+*/
+	/* 
+	$(ikariam.getScreen().selectBarbarianVillage(document.getElementById("barbarianVillage"))).ready(function(){
+		var recursos = document.getElementsByClassName('resources')[1].children
+		var resultado = 0;
+		var arr = [];
+		for (let item of recursos){
+			if(!item.classList.contains("gold")){
+				arr.push(item.innerHTML.replace(",",""));
+				resultado = Number(resultado) + Number(item.innerHTML.replace(",",""));
+			}
+		}
+		alert(resultado);
+	}); 
+	*/
+
+
+/// EXIBIR NOTIFIÇÃO
+var notify = new MutationObserver(function(){browser.runtime.sendMessage({msg: 'Vai lá chehcar, bucha!!', title: 'Algo Aconteceu!'})});
+notify.observe(document.getElementById('advCities'), config);
+
+
+/// EMITIR SOM
+var notifyAudio = new Audio("https://assets.mixkit.co/sfx/download/mixkit-sci-fi-confirmation-914.wav");
+	notifyAudio.play();

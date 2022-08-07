@@ -1,119 +1,121 @@
-var mainBox = document.createElement('div');
-	mainBox.style.position =  'fixed';
-	mainBox.style.opacity = '0';
-	mainBox.style.visibility = 'hidden';
-	mainBox.style.background =  'rgba(0, 0, 0, 0.9)';
-	mainBox.style.width =  '400px';
-	mainBox.style.height =  '200px';
-	mainBox.style.borderRadius = "10px";
-	mainBox.id =  'mainBox';
-	mainBox.classList = 'btn-menu';
-	mainBox.style.zIndex = '9999';
-	mainBox.style.bottom = '10px';
-	mainBox.style.left = '20px';
-	mainBox.style.transition = "0.5s";
-	mainBox.style.boxShadow = "2px 2px 5px rgba(0, 0, 0, 0.7)";
-	mainBox.innerHTML = "<span></span><span></span><span></span><span></span>";
-	document.body.appendChild(mainBox);
-//
-var restoreBtn = document.createElement('b');
-	restoreBtn.style.position =  'fixed';
-	restoreBtn.style.opacity = '1';
-	restoreBtn.style.visibility = 'visible';
-	restoreBtn.style.background =  'rgba(0, 0, 0, 0.9)';
-	restoreBtn.style.padding =  '20px';
-	restoreBtn.style.borderRadius = "10px";
-	restoreBtn.classList = 'btn-menu';
-	restoreBtn.style.zIndex = '9999';
-	restoreBtn.style.bottom = '10px';
-	restoreBtn.style.left = '20px';
-	restoreBtn.id = 'restoreBtn';
-	restoreBtn.style.transition = "0.5s";
-	restoreBtn.style.cursor = "pointer";
-	restoreBtn.style.boxShadow = "2px 2px 5px rgba(0, 0, 0, 0.7)";
-	restoreBtn.innerHTML = "<span></span><span></span><span></span><span></span>";
-	restoreBtn.onclick = mainBoxShowHidden;
-	restoreBtn.innerHTML = '&#9851;';
-	document.body.appendChild(restoreBtn);
-//
-var btn = document.createElement('b');
-	btn.innerHTML = "<span></span><span></span><span></span><span></span>&#10006;";
-	btn.classList = "btn-menu btn-close";
-	btn.onclick = mainBoxShowHidden;
-	mainBox.appendChild(btn);
-//
-var btn = document.createElement('button');
-	btn.innerHTML = "<span></span><span></span><span></span><span></span>Bárbaros";
-	btn.classList = "btn-menu";
-	btn.onclick = resBarb;
-	mainBox.appendChild(btn);
-//
-var btn = document.createElement('button');
-	btn.innerHTML = "<span></span><span></span><span></span>exibirProducao";
-	btn.classList = "btn-menu";
-	btn.onclick = exibirProducao;
-	mainBox.appendChild(btn);
-//
-var btn = document.createElement('button');
-	btn.innerHTML = "<span></span><span></span><span></span><span></span>Building Disponível";
-	btn.classList = "btn-menu";
-	btn.onclick = buildingTime;
-	mainBox.appendChild(btn);
-//
-var hr = document.createElement('hr');
-mainBox.appendChild(hr);
+try{
+	mainBox = document.createElement('div');
+		mainBox.style.position =  'fixed';
+		mainBox.style.opacity = '0';
+		mainBox.style.visibility = 'hidden';
+		mainBox.style.background =  'rgba(0, 0, 0, 0.9)';
+		mainBox.style.width =  '400px';
+		mainBox.style.height =  '200px';
+		mainBox.style.borderRadius = "10px";
+		mainBox.id =  'mainBox';
+		mainBox.classList = 'btn-menu';
+		mainBox.style.zIndex = '9999';
+		mainBox.style.bottom = '10px';
+		mainBox.style.left = '20px';
+		mainBox.style.transition = "0.5s";
+		mainBox.style.boxShadow = "2px 2px 5px rgba(0, 0, 0, 0.7)";
+		mainBox.innerHTML = "<span></span><span></span><span></span><span></span>";
+		document.body.appendChild(mainBox);
+	//
+	restoreBtn = document.createElement('b');
+		restoreBtn.style.position =  'fixed';
+		restoreBtn.style.opacity = '1';
+		restoreBtn.style.visibility = 'visible';
+		restoreBtn.style.background =  'rgba(0, 0, 0, 0.9)';
+		restoreBtn.style.padding =  '20px';
+		restoreBtn.style.borderRadius = "10px";
+		restoreBtn.classList = 'btn-menu';
+		restoreBtn.style.zIndex = '9999';
+		restoreBtn.style.bottom = '10px';
+		restoreBtn.style.left = '20px';
+		restoreBtn.id = 'restoreBtn';
+		restoreBtn.style.transition = "0.5s";
+		restoreBtn.style.cursor = "pointer";
+		restoreBtn.style.boxShadow = "2px 2px 5px rgba(0, 0, 0, 0.7)";
+		restoreBtn.innerHTML = "<span></span><span></span><span></span><span></span>";
+		restoreBtn.onclick = mainBoxShowHidden;
+		restoreBtn.innerHTML = '&#9851;';
+		document.body.appendChild(restoreBtn);
+	//
+	var btn = document.createElement('b');
+		btn.innerHTML = "<span></span><span></span><span></span><span></span>&#10006;";
+		btn.classList = "btn-menu btn-close";
+		btn.onclick = mainBoxShowHidden;
+		mainBox.appendChild(btn);
+	//
+	var btn = document.createElement('button');
+		btn.innerHTML = "<span></span><span></span><span></span><span></span>Bárbaros";
+		btn.classList = "btn-menu";
+		btn.onclick = resBarb;
+		mainBox.appendChild(btn);
+	//
+	var btn = document.createElement('button');
+		btn.innerHTML = "<span></span><span></span><span></span>exibirProducao";
+		btn.classList = "btn-menu";
+		btn.onclick = exibirProducao;
+		mainBox.appendChild(btn);
+	//
+	var btn = document.createElement('button');
+		btn.innerHTML = "<span></span><span></span><span></span><span></span>Building Disponível";
+		btn.classList = "btn-menu";
+		btn.onclick = buildingTime;
+		mainBox.appendChild(btn);
+	//
+	var hr = document.createElement('hr');
+	mainBox.appendChild(hr);
+}catch(error){
+	alert(error);
+}
 
-/* $(ikariam.getScreen().selectBarbarianVillage(
-	document.getElementById("barbarianVillage"))).ready(function(){
-		alert('o')
-	}); 
-*/
+exibirProducao();
+var config = {childList: true, subtree: true };
+var callback = function(mutationList, observer) {
+    for (var mutation of mutationList) {
+        if (mutation.type === 'childList') {
+			if ( mutation.target.id == "townHall_c" ) {
+				$(mutation.target).ready(CMStats);
+			}
+			if ( mutation.target.id == "sidebar" ) {
+				$(mutation.target).ready(buildingTime);
+			}
+        }
+			if (mutation.target.id == "js_GlobalMenu_wood"){
+				$(mutation.target).ready(exibirProducao());
+			}
 
-/* SOMA DE RECURSOS PILHAGEM DE BÁRBAROS */
-function resBarb(){
-	
-	document.getElementById("barbarianVillage").click();
-	setTimeout(()=>{
-		var recursos = document.getElementsByClassName('resources')[1].children
-		var resultado = 0;
-		var arr = [];
-		for (let item of recursos){
-			if(!item.classList.contains("gold")){
-				arr.push(item.innerHTML.replace(",",""));
-				resultado = Number(resultado) + Number(item.innerHTML.replace(",",""));
+			if (mutation.target.id == "js_GlobalMenu_cities"){
+				alert('ok')
 			}
-		}
-		if(document.getElementById('textResultado') != null){
-			var textResultado = document.getElementById('textResultado');
-			textResultado.innerHTML = " # "+resultado+" Recursos => ( "+Math.ceil(resultado/500)+" barcos )";
-		}else{
-			var textResultado = document.createElement('b');
-			textResultado.style.color = 'white';
-			textResultado.id = 'textResultado';
-			textResultado.innerHTML = " # "+resultado+" Recursos => ( "+Math.ceil(resultado/500)+" barcos )";
-			mainBox.appendChild(textResultado);
-		}
-		
-	}, 2000);
-	
-	/* 
-	$(ikariam.getScreen().selectBarbarianVillage(document.getElementById("barbarianVillage"))).ready(function(){
-		var recursos = document.getElementsByClassName('resources')[1].children
-		var resultado = 0;
-		var arr = [];
-		for (let item of recursos){
-			if(!item.classList.contains("gold")){
-				arr.push(item.innerHTML.replace(",",""));
-				resultado = Number(resultado) + Number(item.innerHTML.replace(",",""));
+
+			if (mutation.target.id == 'js_unitCountIcons'){
+				troopsResTime();
 			}
-		}
-		alert(resultado);
-	}); 
-	*/
+			//AUTO CLICK CAPTURA PIRATA
+			/* if(mutation.target == $('.alt')[1]){
+				$('.alt')[1].children[4].children[0].click()
+			} */
+    }
+};
+var observer = new MutationObserver(callback);
+observer.observe(document, config);
+
+
+try {
 	
+} catch (error) {
+	var btn = document.createElement('b');
+	btn.innerHTML = (error)+' # Error';
+	mainBox.appendChild(btn);
 }
 
 
+
+
+
+
+
+
+// FUNÇÕES
 function decimalToTime(decimal){
 	if(Number(decimal) == NaN){
 		alert('error')
@@ -204,7 +206,7 @@ function buildingTime(){
 			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);	
 			let producao = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",",""));
 			let estoque = Number(document.getElementById('js_GlobalMenu_wood').innerHTML.replace(",",""));
-			if(estoque > nesc)
+			if(estoque >= nesc)
 				continue;
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
@@ -223,7 +225,7 @@ function buildingTime(){
 			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);
 			let producao = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",",""));
 			let estoque = Number(document.getElementById('js_GlobalMenu_marble').innerHTML.replace(",",""));
-			if(estoque > nesc)
+			if(estoque >= nesc)
 				continue;
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
@@ -241,7 +243,7 @@ function buildingTime(){
 			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);
 			let producao = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",",""));
 			let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",",""));
-			if(estoque > nesc)
+			if(estoque >= nesc)
 				continue;
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
@@ -259,7 +261,7 @@ function buildingTime(){
 			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);
 			let producao = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",",""));
 			let estoque = Number(document.getElementById('js_GlobalMenu_crystal').innerHTML.replace(",",""));
-			if(estoque > nesc)
+			if(estoque >= nesc)
 				continue;
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
@@ -277,7 +279,7 @@ function buildingTime(){
 			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);
 			let producao = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",",""));
 			let estoque = Number(document.getElementById('js_GlobalMenu_sulfur').innerHTML.replace(",",""));
-			if(estoque > nesc)
+			if(estoque >= nesc)
 				continue;
 			let tempo = decimalToTime((nesc - estoque) / producao);
 			
@@ -295,21 +297,21 @@ function buildingTime(){
 
 }
 function exibirProducao(){
-	let producaoMadeira = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",",""));
-	let producaoMarmore = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",",""));
-	let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",",""));
-	let consumoVinho = Number(document.getElementById('js_GlobalMenu_WineConsumption').innerHTML.replace(",",""));
-	let producaoCristal = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",",""));
-	let producaoEnxofre = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",",""));
-	let producaoGold = Number(document.getElementById('js_GlobalMenu_gold_Calculation').innerHTML.replace(",",""));
-	$('.producaoLabel').remove()
-	document.getElementById('js_GlobalMenu_gold').innerHTML += ' <span class="producaoLabel '+((producaoGold) > 0 ? 'positivo' : 'negativo')+'">('+producaoGold+')</span>';
+	let producaoMadeira = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",","")) || 0;
+	let producaoMarmore = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",","")) || 0;
+	let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","")) || 0;
+	let consumoVinho = Number(document.getElementById('js_GlobalMenu_WineConsumption').innerHTML.replace(",","")) || 0;
+	let producaoCristal = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",","")) || 0;
+	let producaoEnxofre = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",","")) || 0;
+	let producaoGold = Number(document.getElementById('js_GlobalMenu_gold_Calculation').innerHTML.replace(",","")) || 0;
+	$('.producaoDiv').remove()
+	document.getElementById('js_GlobalMenu_gold').innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoGold) > 0 ? 'positivo' : 'negativo')+'">('+producaoGold+')</span>';
 
 	let cityResources = document.getElementById('cityResources')
 	cityResources.getElementsByClassName('resources')[0].childNodes.forEach(element => {
 		if(typeof(element.classList) != 'undefined'){
 			if(element.classList.contains('wood')){
-				element.innerHTML += '<span class="producaoLabel '+((producaoMadeira) > 0 ? 'positivo' : 'negativo')+'">('+producaoMadeira+')</span>';
+				element.innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoMadeira) > 0 ? 'positivo' : 'negativo')+'">('+producaoMadeira+')</span></div>';
 			}
 			if(element.classList.contains('wine')){
 				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",",""));
@@ -317,26 +319,26 @@ function exibirProducao(){
 				if((producaoVinho-consumoVinho) < 0 ){
 					tempoPraZerar = decimalToTime(estoque / Math.abs(producaoVinho-consumoVinho))
 					stringTempo = tempoPraZerar.dias+'D '+tempoPraZerar.horas+'H '+tempoPraZerar.minutos+'M';
-					document.getElementById('js_GlobalMenu_wine_tooltip').getElementsByTagName('tbody')[0].innerHTML += '<tr id="js_GlobalMenu_production_wine_tempoPraZerar" class="producaoLabel"><td class="smallFont" >Tempo até zerar</td><td class="rightText" id="js_GlobalMenu_production_wine_tempoPraZerar_value">'+stringTempo+'</td></tr>';
+					document.getElementById('js_GlobalMenu_wine_tooltip').getElementsByTagName('tbody')[0].innerHTML += '<tr id="js_GlobalMenu_production_wine_tempoPraZerar" class="producaoDiv"><td class="smallFont" >Tempo até zerar</td><td class="rightText" id="js_GlobalMenu_production_wine_tempoPraZerar_value">'+stringTempo+'</td></tr>';
 				}
-				element.innerHTML += '<span class="producaoLabel '+((producaoVinho-consumoVinho) > 0 ? 'positivo' : 'negativo')+'">('+(producaoVinho-consumoVinho)+')</span>';
+				element.innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoVinho-consumoVinho) > 0 ? 'positivo' : 'negativo')+'">('+(producaoVinho-consumoVinho)+')</span>';
 			}
 			if(element.classList.contains('marble')){
-				element.innerHTML += '<span class="producaoLabel '+((producaoMarmore) > 0 ? 'positivo' : 'negativo')+'">('+producaoMarmore+')</span>';
+				element.innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoMarmore) > 0 ? 'positivo' : 'negativo')+'">('+producaoMarmore+')</span></div>';
 			}
 			if(element.classList.contains('glass')){
-				element.innerHTML += '<span class="producaoLabel '+((producaoCristal) > 0 ? 'positivo' : 'negativo')+'">('+producaoCristal+')</span>';
+				element.innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoCristal) > 0 ? 'positivo' : 'negativo')+'">('+producaoCristal+')</span></div>';
 			}
 			if(element.classList.contains('sulfur')){
-				element.innerHTML += '<span class="producaoLabel '+((producaoEnxofre) > 0 ? 'positivo' : 'negativo')+'">('+producaoEnxofre+')</span>';
+				element.innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoEnxofre) > 0 ? 'positivo' : 'negativo')+'">('+producaoEnxofre+')</span></div>';
 			}
 		}
 	});
 
 }
 function mainBoxShowHidden(){
-	let mainBox = document.getElementById('mainBox');
-	let restoreBtn = document.getElementById('restoreBtn');
+	//let mainBox = document.getElementById('mainBox');
+	//let restoreBtn = document.getElementById('restoreBtn');
 	if(mainBox.style.opacity == '0'){
 		mainBox.style.opacity = '1'
 		mainBox.style.visibility = 'visible';
@@ -349,40 +351,138 @@ function mainBoxShowHidden(){
 		restoreBtn.style.opacity = '1'
 	}
 }
-exibirProducao();
-var config = {childList: true, subtree: true };
-var callback = function(mutationList, observer) {
-    for (var mutation of mutationList) {
-        if (mutation.type === 'childList') {
-			if ( mutation.target.id == "townHall_c" ) {
-				$(mutation.target).ready(CMStats);
+function resBarb(){
+	document.getElementById("barbarianVillage").click();
+	setTimeout(()=>{
+		var recursos = document.getElementsByClassName('resources')[1].children
+		var resultado = 0;
+		var arr = [];
+		for (let item of recursos){
+			if(!item.classList.contains("gold")){
+				arr.push(item.innerHTML.replace(",",""));
+				resultado = Number(resultado) + Number(item.innerHTML.replace(",",""));
 			}
-			if ( mutation.target.id == "sidebar" ) {
-				$(mutation.target).ready(buildingTime);
+		}
+		if(document.getElementById('textResultado') != null){
+			var textResultado = document.getElementById('textResultado');
+			textResultado.innerHTML = " # "+resultado+" Recursos => ( "+Math.ceil(resultado/500)+" barcos )";
+		}else{
+			var textResultado = document.createElement('b');
+			textResultado.style.color = 'white';
+			textResultado.id = 'textResultado';
+			textResultado.innerHTML = " # "+resultado+" Recursos => ( "+Math.ceil(resultado/500)+" barcos )";
+			mainBox.appendChild(textResultado);
+		}
+		
+	}, 2000);
+	
+	
+}
+function troopsResTime(){
+	costsDiv = document.getElementById('accumulatedResourcesCosts');
+	costsDiv.style.height = "auto";
+
+	for(let item of costsDiv.childNodes){
+		if(typeof(item.classList) != 'undefined')
+		if(item.classList.contains('wood')){
+			let nesc = Number(item.innerText.replace(",",""));	
+			let producao = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",",""));
+			let estoque = Number(document.getElementById('js_GlobalMenu_wood').innerHTML.replace(",",""));
+			mainBox.innerHTML +=  producao + " - " + estoque;
+			if(estoque >= nesc)
+				continue;
+			else{
+				let tempo = decimalToTime((nesc - estoque) / producao);
+				
+				let txt = document.createElement('b');
+				txt.id = 'troopsTimeCalcMadeira';
+				txt.style.fontSize = '10px';
+				txt.style.left = '0';
+				txt.style.fontWeight = '500';
+				txt.style.position = 'absolute';
+				txt.innerHTML = "<br><br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
+				item.appendChild(txt);
 			}
-        }
-    }
-};
-function notifyExtension() {
-	browser.runtime.sendMessage({msg: 'Vai lá chehcar, bucha!!', title: 'Algo Aconteceu!'});
-	return;
+		}else
+		if(item.classList.contains('marble')){
+			let nesc = Number(item.innerText.replace(",",""));
+			let producao = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",",""));
+			let estoque = Number(document.getElementById('js_GlobalMenu_marble').innerHTML.replace(",",""));
+			if(estoque >= nesc)
+				continue;
+			else{
+				let tempo = decimalToTime((nesc - estoque) / producao);
+				
+				let txt = document.createElement('b');
+				txt.id = 'troopsTimeCalcMarmore';
+				txt.style.fontSize = '10px';
+				txt.style.left = '0';
+				txt.style.fontWeight = '500';
+				txt.style.position = 'absolute';
+				txt.innerHTML = "<br><br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
+				item.appendChild(txt);
+			}
+		}else
+		if(item.classList.contains('wine')){
+			let nesc = Number(item.innerText.replace(",",""));
+			let producao = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",",""));
+			let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",",""));
+			if(estoque >= nesc)
+				continue;
+			else{
+				let tempo = decimalToTime((nesc - estoque) / producao);
+				
+				let txt = document.createElement('b');
+				txt.id = 'troopsTimeCalcVinho';
+				txt.style.fontSize = '10px';
+				txt.style.left = '0';
+				txt.style.fontWeight = '500';
+				txt.style.position = 'absolute';
+				txt.innerHTML = "<br><br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
+				item.appendChild(txt);
+			}
+		}else
+		if(item.classList.contains('glass')){
+			let nesc = Number(item.innerText.replace(",",""));
+			let producao = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",",""));
+			let estoque = Number(document.getElementById('js_GlobalMenu_crystal').innerHTML.replace(",",""));
+			if(estoque >= nesc)
+				continue;
+			else{
+				let tempo = decimalToTime((nesc - estoque) / producao);
+				
+				let txt = document.createElement('b');
+				txt.id = 'troopsTimeCalcCristal';
+				txt.style.fontSize = '10px';
+				txt.style.left = '0';
+				txt.style.fontWeight = '500';
+				txt.style.position = 'absolute';
+				txt.innerHTML = "<br><br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
+				item.appendChild(txt);
+			}
+		}else
+		if(item.classList.contains('sulfur')){
+			let nesc = Number(item.innerText.replace(",",""));
+			let producao = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",",""));
+			let estoque = Number(document.getElementById('js_GlobalMenu_sulfur').innerHTML.replace(",",""));
+			if(estoque >= nesc)
+				continue;
+			else{
+				let tempo = decimalToTime((nesc - estoque) / producao);
+				
+				let txt = document.createElement('b');
+				txt.id = 'troopsTimeCalcEnxofre';
+				txt.style.fontSize = '10px';
+				txt.style.left = '0';
+				txt.style.fontWeight = '500';
+				txt.style.position = 'absolute';
+				txt.innerHTML = "<br><br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
+				item.appendChild(txt);
+			}
+		}
+	}
+
 }
-try {
-	var notifyAudio = new Audio("https://assets.mixkit.co/sfx/download/mixkit-sci-fi-confirmation-914.wav");
-	//notifyAudio.play();
-	//document.getElementById('advCities').addEventListener("click", notifyExtension);
-	var btn = document.createElement('b');
-	btn.innerHTML = ' # OK';
-	mainBox.appendChild(btn);
-} catch (error) {
-	var btn = document.createElement('b');
-	btn.innerHTML = (error)+' # Error';
-	mainBox.appendChild(btn);
+function calcRecursos(){
+	
 }
-
-var notify = new MutationObserver(notifyExtension);
-notify.observe(document.getElementById('advCities'), config);
-
-var observer = new MutationObserver(callback);
-observer.observe(document, config);
-

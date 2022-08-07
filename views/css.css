@@ -103,6 +103,9 @@
 }
 .producaoLabel{
     font-size: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 4px;
+    font-weight: 900;
 }
 
 .positivo{
