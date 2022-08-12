@@ -5,7 +5,7 @@ try{
 	    link.rel = 'icon';
 	    document.getElementsByTagName('head')[0].appendChild(link);
 	}
-	link.href = 'https://www.google.com/favicon.ico';
+	link.href = 'https://www.mozilla.org/media/img/favicons/firefox/browser/favicon.f093404c0135.ico';
 	
 	mainBox = document.createElement('div');
 		mainBox.style.position =  'fixed';
@@ -144,37 +144,17 @@ function CMStats(){
 			let maxHabitantes = Number(document.getElementById('js_TownHallMaxInhabitants').innerHTML.replace(",",""));
 			//let crescimentoPH = Number(document.getElementById('js_TownHallPopulationGrowthValue').innerHTML.replace(",",""));
 			let satisfacao = Number(document.getElementById('js_TownHallHappinessLargeValue').innerHTML.replace(",",""));
-			
-			let baseBonus = document.getElementById('js_TownHallSatisfactionOverviewBaseBoniBaseBonusValue');
-			if(!baseBonus.parentElement.classList.contains('invisible')){
-				baseBonus = Number(baseBonus.innerHTML.replace(",",""));
-			}else{
-				baseBonus = 0;
+
+			let positivos = document.getElementsByClassName('positives')[0].getElementsByClassName('cat');
+			let bonusSatisfacao = 0;
+			for(item of positivos){
+				for(child of item.children){
+					if(!child.classList.contains('invisible') && child.tagName == 'DIV'){
+						bonusSatisfacao = bonusSatisfacao + Number(child.querySelector('.value').innerHTML.replace(",",""));;
+					}
+				}
 			}
 
-			let baseBonusCapital = document.getElementById('js_TownHallSatisfactionOverviewBaseBoniCapitalBonusValue');
-			if(!baseBonusCapital.parentElement.classList.contains('invisible')){
-				baseBonusCapital = Number(baseBonusCapital.innerHTML.replace(",",""));
-			}else{
-				baseBonusCapital = 0;
-			}
-
-			let wineBonusTaverna = document.getElementById('js_TownHallSatisfactionOverviewWineBoniTavernBonusValue');
-			if(!wineBonusTaverna.parentElement.classList.contains('invisible')){
-				wineBonusTaverna = Number(wineBonusTaverna.innerHTML.replace(",",""));
-			}else{
-				wineBonusTaverna = 0;
-			}
-
-			let wineBonusServido = document.getElementById('js_TownHallSatisfactionOverviewWineBoniServeBonusValue');
-			if(!wineBonusServido.parentElement.classList.contains('invisible')){
-				wineBonusServido = Number(wineBonusServido.innerHTML.replace(",",""));
-			}else{
-				wineBonusServido = 0;
-			}
-			
-			let bonusSatisfacao = baseBonus + baseBonusCapital + wineBonusTaverna + wineBonusServido;
-			//let tempoParaLotar = (maxHabitantes - habitantes) / crescimentoPH
 			let tempoParaLotar = 50*Math.log(satisfacao/(bonusSatisfacao-maxHabitantes));
 
 			let aviso = '';
