@@ -98,6 +98,24 @@ var callback = function(mutationList, observer) {
 			if (mutation.target.id == 'js_unitCountIcons'){
 				troopsResTime();
 			}
+
+			if(mutation.target == document.querySelector('#js_wineAmountContainer > span > a')){
+				let consumoVinho = Number(mutation.target.innerHTML.replace(/\D+$/g, "")) || 0;
+				let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","")) || 0;
+				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",","")) || 0;
+				let tempoPraZerar = '';
+				let stringTempo ='';
+				if((producaoVinho-consumoVinho) < 0 ){
+					tempoPraZerar = decimalToTime(estoque / Math.abs(producaoVinho-consumoVinho))
+					stringTempo = tempoPraZerar.dias+'D '+tempoPraZerar.horas+'H '+tempoPraZerar.minutos+'M';
+				}
+				stringFinal='<div class="tabernaStats"><br><b>Até Zerar:</b> '+stringTempo+
+							'<br><b>Consumo Diário:</b> '+(consumoVinho*24)+'<br></div>'
+				$('.tabernaStats').remove();
+				$(mutation.target).after(stringFinal);
+				
+
+			}
 			//AUTO CLICK CAPTURA PIRATA
 			/* if(mutation.target == $('.alt')[1]){
 				$('.alt')[1].children[4].children[0].click()
