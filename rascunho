@@ -30,3 +30,34 @@ notify.observe(document.getElementById('advCities'), config);
 /// EMITIR SOM
 var notifyAudio = new Audio("https://assets.mixkit.co/sfx/download/mixkit-sci-fi-confirmation-914.wav");
 	notifyAudio.play();
+
+/// ANTIGO METODO DE CALCULO DE SATISFACAO POSITIVA
+/* 			let baseBonus = document.getElementById('js_TownHallSatisfactionOverviewBaseBoniBaseBonusValue');
+			if(!baseBonus.parentElement.classList.contains('invisible')){
+				baseBonus = Number(baseBonus.innerHTML.replace(",",""));
+			}else{
+				baseBonus = 0;
+			}
+
+			let baseBonusCapital = document.getElementById('js_TownHallSatisfactionOverviewBaseBoniCapitalBonusValue');
+			if(!baseBonusCapital.parentElement.classList.contains('invisible')){
+				baseBonusCapital = Number(baseBonusCapital.innerHTML.replace(",",""));
+			}else{
+				baseBonusCapital = 0;
+			}
+
+			let wineBonusTaverna = document.getElementById('js_TownHallSatisfactionOverviewWineBoniTavernBonusValue');
+			if(!wineBonusTaverna.parentElement.classList.contains('invisible')){
+				wineBonusTaverna = Number(wineBonusTaverna.innerHTML.replace(",",""));
+			}else{
+				wineBonusTaverna = 0;
+			}
+
+			let wineBonusServido = document.getElementById('js_TownHallSatisfactionOverviewWineBoniServeBonusValue');
+			if(!wineBonusServido.parentElement.classList.contains('invisible')){
+				wineBonusServido = Number(wineBonusServido.innerHTML.replace(",",""));
+			}else{
+				wineBonusServido = 0;
+			} */
+			
+			//let bonusSatisfacao = baseBonus + baseBonusCapital + wineBonusTaverna + wineBonusServido;
