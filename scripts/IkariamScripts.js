@@ -80,14 +80,21 @@ var config = {childList: true, subtree: true };
 var callback = function(mutationList, observer) {
     for (var mutation of mutationList) {
         if (mutation.type === 'childList') {
-			if ( mutation.target.id == "townHall_c" ) {
-				$(mutation.target).ready(CMStats);
-			}
+
 			if ( mutation.target.id == "sidebar" ) {
 				$(mutation.target).ready(buildingTime);
 			}
         }
+
+			if ( mutation.target.id == "js_TownHallOccupiedSpace" ) {
+				$(mutation.target).ready(CMStats);
+			} 
+
 			if (mutation.target.id == "js_GlobalMenu_wood"){
+				$(mutation.target).ready(exibirProducao());
+			}
+
+			if (mutation.target.id == "js_GlobalMenu_gold_Calculation"){
 				$(mutation.target).ready(exibirProducao());
 			}
 
