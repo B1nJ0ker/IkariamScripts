@@ -98,8 +98,8 @@ var callback = function(mutationList, observer) {
 				$(mutation.target).ready(exibirProducao());
 			}
 
-			if (mutation.target.id == "js_GlobalMenu_cities"){
-				alert('ok')
+			if (mutation.target.id == "barbarianVillage_c"){
+				resBarb();
 			}
 
 			if (mutation.target.id == 'js_unitCountIcons'){
@@ -108,8 +108,8 @@ var callback = function(mutationList, observer) {
 
 			if(mutation.target == document.querySelector('#js_wineAmountContainer > span > a')){
 				let consumoVinho = Number(mutation.target.innerHTML.replace(/\D+$/g, "")) || 0;
-				let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","")) || 0;
-				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",","")) || 0;
+				let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","").replace("k","000")) || 0;
+				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",","").replace("k","000")) || 0;
 				let tempoPraZerar = '';
 				let stringTempo ='';
 				if((producaoVinho-consumoVinho) < 0 ){
@@ -142,12 +142,6 @@ try {
 }
 
 
-
-
-
-
-
-
 // FUNÇÕES
 function decimalToTime(decimal){
 	if(Number(decimal) == NaN){
@@ -165,17 +159,17 @@ function decimalToTime(decimal){
 }
 function CMStats(){
 	try {
-			//let habitantes = Number(document.getElementById('js_TownHallOccupiedSpace').innerHTML.replace(",",""));
-			let maxHabitantes = Number(document.getElementById('js_TownHallMaxInhabitants').innerHTML.replace(",",""));
-			//let crescimentoPH = Number(document.getElementById('js_TownHallPopulationGrowthValue').innerHTML.replace(",",""));
-			let satisfacao = Number(document.getElementById('js_TownHallHappinessLargeValue').innerHTML.replace(",",""));
+			//let habitantes = Number(document.getElementById('js_TownHallOccupiedSpace').innerHTML.replace(",","").replace("k","000"));
+			let maxHabitantes = Number(document.getElementById('js_TownHallMaxInhabitants').innerHTML.replace(",","").replace("k","000"));
+			//let crescimentoPH = Number(document.getElementById('js_TownHallPopulationGrowthValue').innerHTML.replace(",","").replace("k","000"));
+			let satisfacao = Number(document.getElementById('js_TownHallHappinessLargeValue').innerHTML.replace(",","").replace("k","000"));
 
 			let positivos = document.getElementsByClassName('positives')[0].getElementsByClassName('cat');
 			let bonusSatisfacao = 0;
 			for(item of positivos){
 				for(child of item.children){
 					if(!child.classList.contains('invisible') && child.tagName == 'DIV'){
-						bonusSatisfacao = bonusSatisfacao + Number(child.querySelector('.value').innerHTML.replace(",",""));;
+						bonusSatisfacao = bonusSatisfacao + Number(child.querySelector('.value').innerHTML.replace(",","").replace("k","000"));;
 					}
 				}
 			}
@@ -188,13 +182,14 @@ function CMStats(){
 			}
 			let tempo = decimalToTime(Math.abs(tempoParaLotar));
 
+			let textString = "<br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M "+aviso+"<br>";;
 			if(document.getElementById('textResultado') != null){
 				let textResultado = document.getElementById('textResultado');
-				textResultado.innerHTML = "<br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M "+aviso+"<br>";
+				textResultado.innerHTML = textString;
 			}else{
 				let textResultado = document.createElement('b');
 				textResultado.id = 'textResultado';
-				textResultado.innerHTML = "<br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M "+aviso+"<br>";
+				textResultado.innerHTML = textString;
 				document.getElementsByClassName('space')[0].appendChild(textResultado);
 			}
 	} catch (error) {
@@ -212,113 +207,104 @@ function buildingTime(){
 			resourceElement = item;
 		}
 	}
+	let divMaster = document.createElement('div');
+	divMaster.classList = 'buildTimeDiv';
+	document.getElementById('buildingUpgrade').appendChild(divMaster);
 
 	for(let item of resourceElement.childNodes){
-		if(typeof(item.classList) != 'undefined')
-		if(item.classList.contains('wood')){
-			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);	
-			let producao = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_wood').innerHTML.replace(",",""));
-			if(estoque >= nesc)
-				continue;
-			let tempo = decimalToTime((nesc - estoque) / producao);
-			
-			if(document.getElementById('buildingTimeCalcMadeira') != null){
-				let txt = document.getElementById('buildingTimeCalcMadeira');
-				txt.innerHTML = "<br>"+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-			}else{
-				let txt = document.createElement('b');
+		if(typeof(item.classList) != 'undefined'){
+			let txt = document.createElement('b');
+			txt.style.fontSize = '10px';
+			txt.style.left = '0px';
+			let tempo = 0;
+			let falta = 0;
+			let img = '';
+
+			if(item.classList.contains('wood')){
+				let nesc = Number((item.innerText.replace(",","").replace("k","000").split(":"))[1]);	
+				let estoque = Number(document.getElementById('js_GlobalMenu_wood').innerHTML.replace(",","").replace("k","000"));
+				if(estoque >= nesc)
+					continue;
+				let producao = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",","").replace("k","000"));
+				falta = nesc - estoque;
+				tempo = decimalToTime(falta / producao);
 				txt.id = 'buildingTimeCalcMadeira';
-				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='//gf2.geo.gfsrv.net/cdn19/c3527b2f694fb882563c04df6d8972.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-				document.getElementById('buildingUpgrade').appendChild(txt);
-			}
-		}else
-		if(item.classList.contains('marble')){
-			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);
-			let producao = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_marble').innerHTML.replace(",",""));
-			if(estoque >= nesc)
-				continue;
-			let tempo = decimalToTime((nesc - estoque) / producao);
-			
-			if(document.getElementById('buildingTimeCalcMarmore') != null){
-				document.getElementById('buildingTimeCalcMarmore').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_marble.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-			}else{
-				let txt = document.createElement('b');
+				img = "<img width='13px' src='//gf2.geo.gfsrv.net/cdn19/c3527b2f694fb882563c04df6d8972.png'>";
+
+			}else
+			if(item.classList.contains('marble')){
+				let nesc = Number((item.innerText.replace(",","").replace("k","000").split(":"))[1]);
+				let estoque = Number(document.getElementById('js_GlobalMenu_marble').innerHTML.replace(",","").replace("k","000"));
+				if(estoque >= nesc)
+					continue;
+				let producao = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",","").replace("k","000"));
+				falta = nesc - estoque;
+				tempo = decimalToTime(falta / producao);
 				txt.id = 'buildingTimeCalcMarmore';
-				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_marble.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-				document.getElementById('buildingUpgrade').appendChild(txt);
-			}
-		}else
-		if(item.classList.contains('wine')){
-			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);
-			let producao = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",",""));
-			if(estoque >= nesc)
-				continue;
-			let tempo = decimalToTime((nesc - estoque) / producao);
-			
-			if(document.getElementById('buildingTimeCalcVinho') != null){
-				document.getElementById('buildingTimeCalcVinho').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_wine.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-			}else{
-				let txt = document.createElement('b');
+				img = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_marble.png'>";
+			}else
+			if(item.classList.contains('wine')){
+				let nesc = Number((item.innerText.replace(",","").replace("k","000").split(":"))[1]);
+				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",","").replace("k","000"));
+				if(estoque >= nesc)
+					continue;
+				let producao = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","").replace("k","000"));
+				falta = nesc - estoque;
+				tempo = decimalToTime(falta / producao);
 				txt.id = 'buildingTimeCalcVinho';
-				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_wine.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-				document.getElementById('buildingUpgrade').appendChild(txt);
-			}
-		}else
-		if(item.classList.contains('glass')){
-			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);
-			let producao = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_crystal').innerHTML.replace(",",""));
-			if(estoque >= nesc)
-				continue;
-			let tempo = decimalToTime((nesc - estoque) / producao);
-			
-			if(document.getElementById('buildingTimeCalcCristal') != null){
-				document.getElementById('buildingTimeCalcCristal').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_glass.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-			}else{
-				let txt = document.createElement('b');
+				img = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_wine.png'>";
+			}else
+			if(item.classList.contains('glass')){
+				let nesc = Number((item.innerText.replace(",","").replace("k","000").split(":"))[1]);
+				let estoque = Number(document.getElementById('js_GlobalMenu_crystal').innerHTML.replace(",","").replace("k","000"));
+				if(estoque >= nesc)
+					continue;
+				let producao = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",","").replace("k","000"));
+				falta = nesc - estoque;
+				tempo = decimalToTime(falta / producao);
 				txt.id = 'buildingTimeCalcCristal';
-				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_glass.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-				document.getElementById('buildingUpgrade').appendChild(txt);
-			}
-		}else
-		if(item.classList.contains('sulfur')){
-			let nesc = Number((item.innerText.replace(",","").split(":"))[1]);
-			let producao = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_sulfur').innerHTML.replace(",",""));
-			if(estoque >= nesc)
-				continue;
-			let tempo = decimalToTime((nesc - estoque) / producao);
-			
-			if(document.getElementById('buildingTimeCalcEnxofre') != null){
-				document.getElementById('buildingTimeCalcEnxofre').innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_sulfur.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-			}else{
-				let txt = document.createElement('b');
+				img = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_glass.png'>";
+			}else
+			if(item.classList.contains('sulfur')){
+				let nesc = Number((item.innerText.replace(",","").replace("k","000").split(":"))[1]);
+				let estoque = Number(document.getElementById('js_GlobalMenu_sulfur').innerHTML.replace(",","").replace("k","000"));
+				if(estoque >= nesc)
+					continue;
+				let producao = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",","").replace("k","000"));
+				falta = nesc - estoque;
+				tempo = decimalToTime(falta / producao);
 				txt.id = 'buildingTimeCalcEnxofre';
-				txt.style.fontSize = '10px';
-				txt.innerHTML = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_sulfur.png'> "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
-				document.getElementById('buildingUpgrade').appendChild(txt);
+				img = "<img width='13px' src='https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/icon_sulfur.png'>";
+			}
+
+			if(falta > 0){
+				if(!isNaN(tempo.minutos)){
+					txt.innerHTML = 
+						img+" ( "+new Intl.NumberFormat('pt-BR',  { maximumFractionDigits: 2 }).format(falta)+" ) 🡆 "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
+				}else{
+					txt.innerHTML = img+" ( "+new Intl.NumberFormat('pt-BR',  { maximumFractionDigits: 2 } ).format(falta)+" ) 🡆 ∞ <br>";
+				}
+				if(document.getElementById(txt.id) == null)
+					divMaster.appendChild(txt);
+				else
+					document.getElementById(txt.id).innerHTML = txt.innerHTML;
 			}
 		}
 	}
 
 }
 function exibirProducao(){
-	let producaoMadeira = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",","")) || 0;
-	let producaoMarmore = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",","")) || 0;
-	let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","")) || 0;
-	let consumoVinho = Number(document.getElementById('js_GlobalMenu_WineConsumption').innerHTML.replace(",","")) || 0;
-	let producaoCristal = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",","")) || 0;
-	let producaoEnxofre = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",","")) || 0;
-	let producaoGold = Number(document.getElementById('js_GlobalMenu_gold_Calculation').innerHTML.replace(",","")) || 0;
+	let producaoMadeira = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",","").replace("k","000")) || 0;
+	let producaoMarmore = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",","").replace("k","000")) || 0;
+	let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","").replace("k","000")) || 0;
+	let consumoVinho = Number(document.getElementById('js_GlobalMenu_WineConsumption').innerHTML.replace(",","").replace("k","000")) || 0;
+	let producaoCristal = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",","").replace("k","000")) || 0;
+	let producaoEnxofre = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",","").replace("k","000")) || 0;
+	let producaoGold = Number(document.getElementById('js_GlobalMenu_gold_Calculation').innerHTML.replace(",","").replace("k","000")) || 0;
 	$('.producaoDiv').remove()
-	document.getElementById('js_GlobalMenu_gold').innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoGold) > 0 ? 'positivo' : 'negativo')+'">('+producaoGold+')</span>';
+	let gold = document.getElementById('js_GlobalMenu_gold');
+		gold.innerHTML += '<span class="producaoDiv '+((producaoGold) > 0 ? 'positivo' : 'negativo')+'"><br>('+producaoGold+')</span>';
+		gold.style.lineHeight = "13px";
 
 	let cityResources = document.getElementById('cityResources')
 	cityResources.getElementsByClassName('resources')[0].childNodes.forEach(element => {
@@ -327,7 +313,7 @@ function exibirProducao(){
 				element.innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoMadeira) > 0 ? 'positivo' : 'negativo')+'">('+producaoMadeira+')</span></div>';
 			}
 			if(element.classList.contains('wine')){
-				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",",""));
+				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",","").replace("k","000"));
 				let tempoPraZerar = '';
 				if((producaoVinho-consumoVinho) < 0 ){
 					tempoPraZerar = decimalToTime(estoque / Math.abs(producaoVinho-consumoVinho))
@@ -345,6 +331,7 @@ function exibirProducao(){
 			if(element.classList.contains('sulfur')){
 				element.innerHTML += '<div class="producaoDiv"><span class="producaoLabel '+((producaoEnxofre) > 0 ? 'positivo' : 'negativo')+'">('+producaoEnxofre+')</span></div>';
 			}
+			element.style.lineHeight = "13px";
 		}
 	});
 
@@ -365,29 +352,19 @@ function mainBoxShowHidden(){
 	}
 }
 function resBarb(){
-	document.getElementById("barbarianVillage").click();
-	setTimeout(()=>{
-		var recursos = document.getElementsByClassName('resources')[1].children
+	$('.resources').ready(()=>{
+		var recursosDiv = document.querySelector('.barbarianCityResources .resources');
+		var recursos = recursosDiv.children;
 		var resultado = 0;
 		var arr = [];
 		for (let item of recursos){
 			if(!item.classList.contains("gold")){
-				arr.push(item.innerHTML.replace(",",""));
-				resultado = Number(resultado) + Number(item.innerHTML.replace(",",""));
+				arr.push(item.innerHTML.replace(",","").replace("k","000"));
+				resultado = Number(resultado) + Number(item.innerHTML.replace(",","").replace("k","000"));
 			}
 		}
-		if(document.getElementById('textResultado') != null){
-			var textResultado = document.getElementById('textResultado');
-			textResultado.innerHTML = " # "+resultado+" Recursos => ( "+Math.ceil(resultado/500)+" barcos )";
-		}else{
-			var textResultado = document.createElement('b');
-			textResultado.style.color = 'white';
-			textResultado.id = 'textResultado';
-			textResultado.innerHTML = " # "+resultado+" Recursos => ( "+Math.ceil(resultado/500)+" barcos )";
-			mainBox.appendChild(textResultado);
-		}
-		
-	}, 2000);
+		recursosDiv.innerHTML += '<li class="barcosIcon" id="totalBarcos">'+Math.ceil(resultado/500)+'</li>';
+	});
 	
 	
 }
@@ -398,9 +375,9 @@ function troopsResTime(){
 	for(let item of costsDiv.childNodes){
 		if(typeof(item.classList) != 'undefined')
 		if(item.classList.contains('wood')){
-			let nesc = Number(item.innerText.replace(",",""));	
-			let producao = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_wood').innerHTML.replace(",",""));
+			let nesc = Number(item.innerText.replace(",","").replace("k","000"));	
+			let producao = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",","").replace("k","000"));
+			let estoque = Number(document.getElementById('js_GlobalMenu_wood').innerHTML.replace(",","").replace("k","000"));
 			mainBox.innerHTML +=  producao + " - " + estoque;
 			if(estoque >= nesc)
 				continue;
@@ -418,9 +395,9 @@ function troopsResTime(){
 			}
 		}else
 		if(item.classList.contains('marble')){
-			let nesc = Number(item.innerText.replace(",",""));
-			let producao = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_marble').innerHTML.replace(",",""));
+			let nesc = Number(item.innerText.replace(",","").replace("k","000"));
+			let producao = Number(document.getElementById('js_GlobalMenu_production_marble').innerHTML.replace(",","").replace("k","000"));
+			let estoque = Number(document.getElementById('js_GlobalMenu_marble').innerHTML.replace(",","").replace("k","000"));
 			if(estoque >= nesc)
 				continue;
 			else{
@@ -437,9 +414,9 @@ function troopsResTime(){
 			}
 		}else
 		if(item.classList.contains('wine')){
-			let nesc = Number(item.innerText.replace(",",""));
-			let producao = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",",""));
+			let nesc = Number(item.innerText.replace(",","").replace("k","000"));
+			let producao = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","").replace("k","000"));
+			let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",","").replace("k","000"));
 			if(estoque >= nesc)
 				continue;
 			else{
@@ -456,9 +433,9 @@ function troopsResTime(){
 			}
 		}else
 		if(item.classList.contains('glass')){
-			let nesc = Number(item.innerText.replace(",",""));
-			let producao = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_crystal').innerHTML.replace(",",""));
+			let nesc = Number(item.innerText.replace(",","").replace("k","000"));
+			let producao = Number(document.getElementById('js_GlobalMenu_production_crystal').innerHTML.replace(",","").replace("k","000"));
+			let estoque = Number(document.getElementById('js_GlobalMenu_crystal').innerHTML.replace(",","").replace("k","000"));
 			if(estoque >= nesc)
 				continue;
 			else{
@@ -475,9 +452,9 @@ function troopsResTime(){
 			}
 		}else
 		if(item.classList.contains('sulfur')){
-			let nesc = Number(item.innerText.replace(",",""));
-			let producao = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",",""));
-			let estoque = Number(document.getElementById('js_GlobalMenu_sulfur').innerHTML.replace(",",""));
+			let nesc = Number(item.innerText.replace(",","").replace("k","000"));
+			let producao = Number(document.getElementById('js_GlobalMenu_production_sulfur').innerHTML.replace(",","").replace("k","000"));
+			let estoque = Number(document.getElementById('js_GlobalMenu_sulfur').innerHTML.replace(",","").replace("k","000"));
 			if(estoque >= nesc)
 				continue;
 			else{
@@ -497,5 +474,11 @@ function troopsResTime(){
 
 }
 function calcRecursos(){
+	
+}
+function islandFilter(){
+	document.querySelectorAll('.ally').forEach((el)=>{
+		el.parentElement.style = "visibility: hidden";
+	});
 	
 }

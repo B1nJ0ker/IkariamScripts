@@ -103,9 +103,19 @@
 }
 .producaoLabel{
     font-size: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 4px;
     font-weight: 900;
+}
+
+.buildTimeDiv{
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+    margin: 10%;
+}
+
+.barcosIcon {
+	background: url(https://s303-en.ikariam.gameforge.com/cdn/all/both/characters/fleet/60x60/ship_transport_r_60x60.png) no-repeat top left transparent;
+    background-size: 19px;
 }
 
 .positivo{
