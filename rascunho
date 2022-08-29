@@ -23,9 +23,18 @@
 
 
 /// EXIBIR NOTIFIÇÃO
-var notify = new MutationObserver(function(){browser.runtime.sendMessage({msg: 'Vai lá chehcar, bucha!!', title: 'Algo Aconteceu!'})});
+var notify = new MutationObserver(function(){
+	browser.runtime.sendMessage({msg: 'Vai lá chehcar, bucha!!', title: 'Algo Aconteceu!'})
+});
 notify.observe(document.getElementById('advCities'), config);
 
+// BROWSER COOKIES
+var setCookie = await browser.runtime.sendMessage({
+	func: 'setCookie',name: "idCityPirataria", url: "*://*.ikariam.gameforge.com/*", value: '2222'
+})
+var cookieValue = await browser.runtime.sendMessage({
+	func: 'getCookie',name: "idCityPirataria", url: "*://*.ikariam.gameforge.com/*"
+})
 
 /// EMITIR SOM
 var notifyAudio = new Audio("https://assets.mixkit.co/sfx/download/mixkit-sci-fi-confirmation-914.wav");

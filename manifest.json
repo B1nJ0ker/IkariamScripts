@@ -18,7 +18,7 @@
     }
   ],
 
-  "permissions": ["notifications"],
+  "permissions": ["notifications", "cookies", "activeTab"],
   "background": {
     "scripts": ["scripts/background.js"]
   },

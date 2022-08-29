@@ -6,23 +6,12 @@ try{
 	    document.getElementsByTagName('head')[0].appendChild(link);
 	}
 	link.href = 'https://www.mozilla.org/media/img/favicons/firefox/browser/favicon.f093404c0135.ico';
-	
-	mainBox = document.createElement('div');
-		mainBox.style.position =  'fixed';
-		mainBox.style.opacity = '0';
-		mainBox.style.visibility = 'hidden';
-		mainBox.style.background =  'rgba(0, 0, 0, 0.9)';
-		mainBox.style.width =  '400px';
-		mainBox.style.height =  '200px';
-		mainBox.style.borderRadius = "10px";
+
+	var mainBox = document.createElement('div');
 		mainBox.id =  'mainBox';
-		mainBox.classList = 'btn-menu';
-		mainBox.style.zIndex = '9999';
-		mainBox.style.bottom = '10px';
-		mainBox.style.left = '20px';
-		mainBox.style.transition = "0.5s";
-		mainBox.style.boxShadow = "2px 2px 5px rgba(0, 0, 0, 0.7)";
-		mainBox.innerHTML = "<span></span><span></span><span></span><span></span>";
+		mainBox.style.visibility = 'hidden';
+		mainBox.style.opacity = '0';
+		mainBox.classList = 'draggable_div';
 		document.body.appendChild(mainBox);
 	//
 	restoreBtn = document.createElement('b');
@@ -45,103 +34,83 @@ try{
 		restoreBtn.innerHTML = '&#9851;';
 		document.body.appendChild(restoreBtn);
 	//
+
+	// MENU BUTTONS
+	var buttonsDiv = document.createElement('div');
+		buttonsDiv.classList =  'buttonsMenuDiv';
+	//
 	var btn = document.createElement('b');
 		btn.innerHTML = "<span></span><span></span><span></span><span></span>&#10006;";
 		btn.classList = "btn-menu btn-close";
 		btn.onclick = mainBoxShowHidden;
-		mainBox.appendChild(btn);
+		buttonsDiv.appendChild(btn);
 	//
 	var btn = document.createElement('button');
-		btn.innerHTML = "<span></span><span></span><span></span><span></span>Bárbaros";
+		btn.innerHTML = "Bárbaros";
 		btn.classList = "btn-menu";
 		btn.onclick = resBarb;
-		mainBox.appendChild(btn);
+		buttonsDiv.appendChild(btn);
 	//
 	var btn = document.createElement('button');
-		btn.innerHTML = "<span></span><span></span><span></span>exibirProducao";
+		btn.innerHTML = "exibirProducao";
 		btn.classList = "btn-menu";
 		btn.onclick = exibirProducao;
-		mainBox.appendChild(btn);
+		buttonsDiv.appendChild(btn);
 	//
 	var btn = document.createElement('button');
-		btn.innerHTML = "<span></span><span></span><span></span><span></span>Building Disponível";
+		btn.innerHTML = "Auto Pirataria";
 		btn.classList = "btn-menu";
-		btn.onclick = buildingTime;
-		mainBox.appendChild(btn);
+		btn.onclick = ()=>{
+			$('.div-menu').css( "visibility", "hidden" );
+			$('#piratariaDiv').css( "visibility", "visible" );
+		}
+		buttonsDiv.appendChild(btn);
+
+	mainBox.appendChild(buttonsDiv);
 	//
 	var hr = document.createElement('hr');
 	mainBox.appendChild(hr);
+
+	// MENU CONTENT DIVS
+	var contentDiv = document.createElement('div');
+	contentDiv.classList =  'contentMenuDiv';
+	mainBox.appendChild(contentDiv);
+
+	// PIRATARIA
+	var piratariaDiv = document.createElement('div');
+		piratariaDiv.id = 'piratariaDiv'
+		piratariaDiv.style.visibility = 'hidden'
+		contentDiv.appendChild(piratariaDiv);
+	var iniciaPara = document.createElement('button');
+		iniciaPara.innerHTML = "Iniciar";
+		iniciaPara.setAttribute('func', 'start');
+		iniciaPara.classList = "btn-menu";
+		iniciaPara.onclick = ()=>{
+			if(iniciaPara.getAttribute('func') == 'start'){
+				piratariaDivContent.innerHTML = null;
+				autoPirataria();
+				iniciaPara.setAttribute('func', 'stop');
+				iniciaPara.innerHTML = "<span></span><span></span><span></span><span></span>Parar";
+			}else{
+				piratariaTimer.stop();
+				auxPirata = 1;
+				piratariaTimer = null;
+				iniciaPara.setAttribute('func', 'start');
+				iniciaPara.innerHTML = "Iniciar";
+			}
+			
+		}
+	piratariaDiv.appendChild(iniciaPara);
+	var piratariaDivContent = document.createElement('div');
+		piratariaDivContent.style.overflowY = 'auto'
+	piratariaDiv.appendChild(piratariaDivContent)
+	//
 }catch(error){
 	alert(error);
 }
-
-exibirProducao();
-var config = {childList: true, subtree: true };
-var callback = function(mutationList, observer) {
-    for (var mutation of mutationList) {
-        if (mutation.type === 'childList') {
-
-			if ( mutation.target.id == "sidebar" ) {
-				$(mutation.target).ready(buildingTime);
-			}
-        }
-
-			if ( mutation.target.id == "js_TownHallOccupiedSpace" ) {
-				$(mutation.target).ready(CMStats);
-			} 
-
-			if (mutation.target.id == "js_GlobalMenu_wood"){
-				$(mutation.target).ready(exibirProducao());
-			}
-
-			if (mutation.target.id == "js_GlobalMenu_gold_Calculation"){
-				$(mutation.target).ready(exibirProducao());
-			}
-
-			if (mutation.target.id == "barbarianVillage_c"){
-				resBarb();
-			}
-
-			if (mutation.target.id == 'js_unitCountIcons'){
-				troopsResTime();
-			}
-
-			if(mutation.target == document.querySelector('#js_wineAmountContainer > span > a')){
-				let consumoVinho = Number(mutation.target.innerHTML.replace(/\D+$/g, "")) || 0;
-				let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","").replace("k","000")) || 0;
-				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",","").replace("k","000")) || 0;
-				let tempoPraZerar = '';
-				let stringTempo ='';
-				if((producaoVinho-consumoVinho) < 0 ){
-					tempoPraZerar = decimalToTime(estoque / Math.abs(producaoVinho-consumoVinho))
-					stringTempo = tempoPraZerar.dias+'D '+tempoPraZerar.horas+'H '+tempoPraZerar.minutos+'M';
-				}
-				stringFinal='<div class="tabernaStats"><br><b>Até Zerar:</b> '+stringTempo+
-							'<br><b>Consumo Diário:</b> '+(consumoVinho*24)+'<br></div>'
-				$('.tabernaStats').remove();
-				$(mutation.target).after(stringFinal);
-				
-
-			}
-			//AUTO CLICK CAPTURA PIRATA
-			/* if(mutation.target == $('.alt')[1]){
-				$('.alt')[1].children[4].children[0].click()
-			} */
-    }
-};
-var observer = new MutationObserver(callback);
-observer.observe(document, config);
-
-
-try {
-	
-} catch (error) {
-	var btn = document.createElement('b');
-	btn.innerHTML = (error)+' # Error';
-	mainBox.appendChild(btn);
+if (typeof browser === "undefined") {
+    var browser = chrome;
 }
-
-
 // FUNÇÕES
 function decimalToTime(decimal){
 	if(Number(decimal) == NaN){
@@ -208,7 +177,6 @@ function buildingTime(){
 		}
 	}
 	let divMaster = document.createElement('div');
-	divMaster.classList = 'buildTimeDiv';
 	document.getElementById('buildingUpgrade').appendChild(divMaster);
 
 	for(let item of resourceElement.childNodes){
@@ -278,6 +246,7 @@ function buildingTime(){
 			}
 
 			if(falta > 0){
+				divMaster.classList = 'buildTimeDiv';
 				if(!isNaN(tempo.minutos)){
 					txt.innerHTML = 
 						img+" ( "+new Intl.NumberFormat('pt-BR',  { maximumFractionDigits: 2 }).format(falta)+" ) 🡆 "+tempo.dias+"D "+tempo.horas+"H "+tempo.minutos+"M <br>";
@@ -481,4 +450,270 @@ function islandFilter(){
 		el.parentElement.style = "visibility: hidden";
 	});
 	
+}
+var auxPirata = 1;
+var piratariaTimer;
+async function autoPirataria(chk = 0){
+	console.log('Capturando...')
+	//cookieidCityPirataria = cookies.get('idCityPirataria')
+	//console.log(cookieidCityPirataria);
+	let cookieidCityPirataria = document.cookie.split('; ').find((row) => row.startsWith('idCityPirataria='))?.split('=')[1];
+	console.log("1> "+cookieidCityPirataria)
+	asyncAjax("https://s303-en.ikariam.gameforge.com/?view=pirateFortress&position=17&ajax=1").then((r)=>{
+		if(cookieidCityPirataria == null || cookieidCityPirataria == "" || cookieidCityPirataria == "undefined" ){
+			cookieidCityPirataria = r[0][1].headerData.cityDropdownMenu.selectedCity.replace(/\D/g,'')
+			document.cookie = "idCityPirataria="+cookieidCityPirataria
+		}
+		console.log("2> "+r[0][1].headerData.cityDropdownMenu.selectedCity.replace(/\D/g,''))
+		asyncAjax(
+			"https://s303-en.ikariam.gameforge.com/?action=PiracyScreen&function=capture&buildingLevel=1&view=pirateFortress&cityId="
+			+cookieidCityPirataria+"&position=17&activeTab=tabBootyQuest&backgroundView=city&currentCityId="
+			+cookieidCityPirataria+"&templateView=pirateFortress&actionRequest="
+			+r[0][1].actionRequest+"&ajax=1"
+		).then((res)=>{
+			console.log(res);
+			let erros = false;
+			let dv = document.createElement('div');
+			try{
+				if(res[3][1][0].type == 10 && !res[1][1][1].includes('captcha')){
+					console.log("Pirateando");
+					var mostrador = document.createElement('b');
+					dv.id = "showPirate_"+auxPirata;
+					dv.innerHTML = "Pirateando 🡆 ";
+					piratariaTimer = new Timer(153, mostrador, function() {
+						dv.innerHTML = "Pirateado ["+auxPirata+"]";
+						autoPirataria(auxPirata++);
+					});
+					piratariaTimer.start();
+					dv.appendChild(mostrador);
+				}else{
+					let capcheck = res[1][1][1].includes('captcha') ? 'Captcha' : '';
+					let token = '';
+					if(res[3][1][0] !== "undefined")
+						token = res[3][1][0].text != 10 ? res[3][1][0].text : ''
+					erros = [capcheck, token]
+				}
+			}catch(err){
+				let capcheck = res[1][1][1].includes('captcha') ? 'Captcha' : '';
+				erros = [capcheck, err]
+			}
+			if(erros){
+				dv.innerHTML = "Falha ao piratear: " + erros
+				var notifyAudio = new Audio("https://assets.mixkit.co/sfx/download/mixkit-sci-fi-confirmation-914.wav");
+					notifyAudio.play();
+				iniciaPara.setAttribute('func', 'start');
+				iniciaPara.innerHTML = "Iniciar";
+				piratariaTimer = null;
+				auxPirata = 1
+				console.log(res)
+			}
+			piratariaDivContent.appendChild(dv);
+			piratariaDivContent.scrollTop = piratariaDivContent.scrollHeight;
+		});
+	
+	})
+
+	/* console.log('Capturando...')
+	document.querySelector('#pirateCaptureBox > div.content > table > tbody > tr:nth-child(1) > td.action > a').click() */
+
+}
+function getDataSet () {
+	if(document.getElementById('datasetDOM') == null)
+		datasetDOM = document.createElement('textarea')
+	else
+		document.getElementById('datasetDOM').remove();
+	datasetDOM.id = 'datasetDOM';
+	datasetDOM.style.visibility = 'hidden';
+	datasetDOM.innerHTML = JSON.stringify(dataSetForView);
+	(document.body || document.head || document.documentElement).appendChild(datasetDOM);
+}
+const asyncAjax = async function(url){
+    return new Promise(function(resolve, reject) {
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                beforeSend: function() {            
+                },
+                success: function(data) {
+                    resolve(data) // Resolve promise and when success
+                },
+                error: function(err) {
+                    reject(err) // Reject the promise and go to catch()
+                }
+            });
+    });
+} 
+var cities = [];
+async function getCitiesInfo (){
+	var script = document.createElement('script');
+	script.appendChild(document.createTextNode('('+ getDataSet +')();'));
+	(document.body || document.head || document.documentElement).appendChild(script);
+	var dataset = JSON.parse(document.getElementById('datasetDOM').innerHTML);
+	document.querySelector('#dropDown_js_citySelectContainer > div.bg > ul').childNodes.forEach(async (el)=>{
+		try{
+			let r = await asyncAjax("https://s303-en.ikariam.gameforge.com/?view=updateGlobalData&currentCityId="+el.getAttribute('selectvalue')+
+			"&templateView=townHall&actionRequest="+dataset.actionRequest+"&ajax=1")
+			console.log(r);
+			cities.push((r))
+		}catch(err){
+			alert(err);
+		}
+	})
+	console.log(cities)
+	var madeira = 0;
+	var vinho = 0;
+	var marmore = 0;
+	var cristal = 0;
+	var enxofre = 0;
+
+	cities.forEach((city)=>{
+		vinho = vinho + city[0][1].headerData.currentResources[1]
+	})
+
+	//citiesStats = document.createElement('div')
+	//citiesStats.innerHTML += " => " + vinho;
+	//mainBox.appendChild(citiesStats);
+}
+
+// TIMER
+	function Timer(mins, target, cb) {
+		this.counter = mins;
+		this.target = target;
+		this.callback = cb;
+		this.clock = null;
+
+	}
+	Timer.prototype.pad = function(s) {
+		return (s < 10) ? '0' + s : s;
+	}
+	Timer.prototype.start = function(s) {
+		this.count();
+	}
+	Timer.prototype.stop = function(s) {
+		clearInterval(this.clock);
+	}
+	Timer.prototype.done = function(s) {
+		if (this.callback) this.callback();
+	}
+	Timer.prototype.display = function(s) {
+		this.target.innerHTML = this.pad(s);
+	}
+	Timer.prototype.count = function(s) {
+		var self = this;
+		self.display.call(self, self.counter);
+		self.counter--;
+		self.clock = setInterval(function() {
+			self.display(self.counter);
+			self.counter--;
+			if (self.counter < 0) {
+				clearInterval(self.clock);
+				self.done.call(self);
+			}
+		}, 1000);
+	}
+
+//
+
+// ARRASTAR ELEMENTOS
+	var dragMe = mainBox;
+	/* o x inicial do drag*/
+	dragOfX = 0,
+	/* o y inicial do drag */
+	dragOfY = 0;
+	/* ao segurar o elemento */
+	function dragStart(e) {
+		/* define o x inicial do drag */
+		dragOfX = e.pageX - dragMe.offsetLeft;
+		/* define o y inicial do drag */
+		dragOfY = e.pageY - dragMe.offsetTop;
+		
+		/* adiciona os eventos */
+		addEventListener("mousemove", dragMove);
+		addEventListener("mouseup", dragEnd);
+	}
+	/* ao ser arrastado */
+	function dragMove(e) {
+		/* atualiza a posição do elemento */
+		dragMe.style.left = (e.pageX - dragOfX) + 'px';
+		dragMe.style.top = (e.pageY - dragOfY) + 'px';
+	}
+	/* ao terminar o drag */
+	function dragEnd() {
+		/* remove os eventos */
+		removeEventListener("mousemove", dragMove);
+		removeEventListener("mouseup", dragEnd);
+	} 
+	/* adiciona o evento que começa o drag */
+	dragMe.addEventListener("mousedown", dragStart);
+//
+
+// START
+getCitiesInfo()
+
+exibirProducao();
+
+var config = {childList: true, subtree: true };
+var callback = function(mutationList, observer) {
+    for (var mutation of mutationList) {
+        if (mutation.type === 'childList') {
+
+			if ( mutation.target.id == "sidebar" ) {
+				$(mutation.target).ready(buildingTime);
+			}
+        }
+
+			if ( mutation.target.id == "js_TownHallOccupiedSpace" ) {
+				$(mutation.target).ready(CMStats);
+			} 
+
+			if (mutation.target.id == "js_GlobalMenu_wood"){
+				$(mutation.target).ready(exibirProducao());
+			}
+
+			if (mutation.target.id == "js_GlobalMenu_gold_Calculation"){
+				$(mutation.target).ready(exibirProducao());
+			}
+
+			if (mutation.target.id == "barbarianVillage_c"){
+				resBarb();
+			}
+
+			if (mutation.target.id == 'js_unitCountIcons'){
+				troopsResTime();
+			}
+
+			if(mutation.target == document.querySelector('#js_wineAmountContainer > span > a')){
+				let consumoVinho = Number(mutation.target.innerHTML.replace(/\D+$/g, "")) || 0;
+				let producaoVinho = Number(document.getElementById('js_GlobalMenu_production_wine').innerHTML.replace(",","").replace("k","000")) || 0;
+				let estoque = Number(document.getElementById('js_GlobalMenu_wine').innerHTML.replace(",","").replace("k","000")) || 0;
+				let tempoPraZerar = '';
+				let stringTempo ='';
+				if((producaoVinho-consumoVinho) < 0 ){
+					tempoPraZerar = decimalToTime(estoque / Math.abs(producaoVinho-consumoVinho))
+					stringTempo = tempoPraZerar.dias+'D '+tempoPraZerar.horas+'H '+tempoPraZerar.minutos+'M';
+				}
+				stringFinal='<div class="tabernaStats"><br><b>Até Zerar:</b> '+stringTempo+
+							'<br><b>Consumo Diário:</b> '+(consumoVinho*24)+'<br></div>'
+				$('.tabernaStats').remove();
+				$(mutation.target).after(stringFinal);
+				
+
+			}
+			//AUTO CLICK CAPTURA PIRATA
+			/* if(mutation.target == $('.alt')[1]){
+				$('.alt')[1].children[4].children[0].click()
+			} */
+    }
+};
+var observer = new MutationObserver(callback);
+observer.observe(document, config);
+
+
+try {
+	
+} catch (error) {
+	var btn = document.createElement('b');
+	btn.innerHTML = (error)+' # Error';
+	mainBox.appendChild(btn);
 }
