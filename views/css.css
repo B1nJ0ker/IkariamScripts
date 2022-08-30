@@ -22,6 +22,11 @@
     flex-direction: column;
 }
 
+.contentMenuDiv{
+    width: inherit;
+    height: inherit;
+}
+
 .btn-menu{
     background: rgba(0, 0, 0, 0.0);
     border: none;
@@ -48,7 +53,7 @@ button.btn-menu , b.btn-menu {
      -webkit-box-reflect:below 1px linear-gradient(transparent, #0005);
 }
 
-.btn-menu:nth-child(1){
+.btn-menu_filtered:nth-child(1){
     filter: hue-rotate(100deg);
 }
 /* .btn-menu:nth-child(2){

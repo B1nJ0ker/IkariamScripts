@@ -60,9 +60,12 @@ try{
 	var btn = document.createElement('button');
 		btn.innerHTML = "Auto Pirataria";
 		btn.classList = "btn-menu";
+		btn.id = 'piratariaMenuBtn'
 		btn.onclick = ()=>{
 			$('.div-menu').css( "visibility", "hidden" );
+			$('.div-menu').removeClass('btn-menu_filtered');
 			$('#piratariaDiv').css( "visibility", "visible" );
+			btn.classList 
 		}
 		buttonsDiv.appendChild(btn);
 
@@ -80,29 +83,30 @@ try{
 	var piratariaDiv = document.createElement('div');
 		piratariaDiv.id = 'piratariaDiv'
 		piratariaDiv.style.visibility = 'hidden'
+		piratariaDiv.style.display = 'flex'
+		piratariaDiv.style.flexDirection = 'column';
+		piratariaDiv.style.height = 'inherit';
 		contentDiv.appendChild(piratariaDiv);
 	var iniciaPara = document.createElement('button');
 		iniciaPara.innerHTML = "Iniciar";
 		iniciaPara.setAttribute('func', 'start');
 		iniciaPara.classList = "btn-menu";
+		iniciaPara.style.height = "20%";
 		iniciaPara.onclick = ()=>{
 			if(iniciaPara.getAttribute('func') == 'start'){
-				piratariaDivContent.innerHTML = null;
-				autoPirataria();
-				iniciaPara.setAttribute('func', 'stop');
-				iniciaPara.innerHTML = "<span></span><span></span><span></span><span></span>Parar";
+				autoPirataria('start');
 			}else{
-				piratariaTimer.stop();
-				auxPirata = 1;
-				piratariaTimer = null;
-				iniciaPara.setAttribute('func', 'start');
-				iniciaPara.innerHTML = "Iniciar";
+				autoPirataria('stop')
 			}
 			
 		}
 	piratariaDiv.appendChild(iniciaPara);
+	var pontosPirataria = document.createElement('div');
+		pontosPirataria.style.textAlign = 'center';
+	piratariaDiv.appendChild(pontosPirataria);
 	var piratariaDivContent = document.createElement('div');
-		piratariaDivContent.style.overflowY = 'auto'
+		piratariaDivContent.style.overflowY = 'auto';
+		piratariaDivContent.style.height = 'inherit';
 	piratariaDiv.appendChild(piratariaDivContent)
 	//
 }catch(error){
@@ -347,7 +351,6 @@ function troopsResTime(){
 			let nesc = Number(item.innerText.replace(",","").replace("k","000"));	
 			let producao = Number(document.getElementById('js_GlobalMenu_resourceProduction').innerHTML.replace(",","").replace("k","000"));
 			let estoque = Number(document.getElementById('js_GlobalMenu_wood').innerHTML.replace(",","").replace("k","000"));
-			mainBox.innerHTML +=  producao + " - " + estoque;
 			if(estoque >= nesc)
 				continue;
 			else{
@@ -453,10 +456,23 @@ function islandFilter(){
 }
 var auxPirata = 1;
 var piratariaTimer;
-async function autoPirataria(chk = 0){
+var pontosPiratas;
+async function autoPirataria(cmd = null){
+	if(cmd == 'stop'){
+		piratariaTimer.stop();
+		auxPirata = 1;
+		piratariaTimer = null;
+		iniciaPara.setAttribute('func', 'start');
+		iniciaPara.classList = "btn-menu";
+		iniciaPara.innerHTML = "Iniciar";
+		return
+	}else if(cmd == 'start'){
+		piratariaDivContent.innerHTML = null;
+		iniciaPara.setAttribute('func', 'stop');
+		iniciaPara.classList = 'btn-menu btn-menu_filtered';
+		iniciaPara.innerHTML = "<span></span><span></span><span></span><span></span>Parar";
+	}
 	console.log('Capturando...')
-	//cookieidCityPirataria = cookies.get('idCityPirataria')
-	//console.log(cookieidCityPirataria);
 	let cookieidCityPirataria = document.cookie.split('; ').find((row) => row.startsWith('idCityPirataria='))?.split('=')[1];
 	console.log("1> "+cookieidCityPirataria)
 	asyncAjax("https://s303-en.ikariam.gameforge.com/?view=pirateFortress&position=17&ajax=1").then((r)=>{
@@ -471,9 +487,15 @@ async function autoPirataria(chk = 0){
 			+cookieidCityPirataria+"&templateView=pirateFortress&actionRequest="
 			+r[0][1].actionRequest+"&ajax=1"
 		).then((res)=>{
+			document.getElementById("js_ChangeCityActionRequest").value = res[0][1].actionRequest;
 			console.log(res);
 			let erros = false;
 			let dv = document.createElement('div');
+			
+			let pirateHTML = document.createElement('div');
+			pirateHTML.innerHTML = res[1][1][1];
+			let atualPontosPiratas = new Intl.NumberFormat('pt-BR',  { maximumFractionDigits: 2 }).format(pirateHTML.querySelector('li.capturePoints > span.value').innerHTML.replace(",",""));
+			pontosPirataria.innerHTML = '<img src="https://s303-en.ikariam.gameforge.com/cdn/all/both/resources/capturePoints.png"> <span style="line-height: 200%;">'+atualPontosPiratas+'</span>'
 			try{
 				if(res[3][1][0].type == 10 && !res[1][1][1].includes('captcha')){
 					console.log("Pirateando");
@@ -482,6 +504,10 @@ async function autoPirataria(chk = 0){
 					dv.innerHTML = "Pirateando 🡆 ";
 					piratariaTimer = new Timer(153, mostrador, function() {
 						dv.innerHTML = "Pirateado ["+auxPirata+"]";
+						if(atualPontosPiratas == pontosPiratas){
+							dv.innerHTML += " #Falha"
+						}
+						pontosPiratas = atualPontosPiratas;
 						autoPirataria(auxPirata++);
 					});
 					piratariaTimer.start();
